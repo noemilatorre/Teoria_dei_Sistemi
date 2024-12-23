@@ -3,13 +3,14 @@
 ## Descrizione del Progetto
 Il progetto **ROBILAUT** riguarda la progettazione del controllo del moto di un robot mobile di tipo uniciclo. Lo scopo è controllare un punto situato sull’asse di simmetria del robot, a una distanza specificata dal punto centrale tra le due ruote.
 
+
 ### Modello del Sistema
 Il modello del robot considera:
 - **Coordinate del punto da controllare**: \(x, y\)
-- **Orientamento**: \(\theta\)
+- **Orientamento**: $\theta$
 - **Velocità**:
-  - Lineare: \(v\)
-  - Angolare: \(\omega\)
+  - Lineare: $v$
+  - Angolare: $\omega$
 
 La posizione del punto controllato è descritta da:
 \[
@@ -34,27 +35,27 @@ x = \begin{bmatrix} x \\ y \\ \theta \end{bmatrix}, \quad u = \begin{bmatrix} v 
 \]
 
 ### Sistema di Misura
-Un sistema satellitare è montato sul veicolo e misura la posizione a una distanza \(\alpha\) dal centro (\(x_0, y_0\)) lungo l’asse \(y_b\):
+Un sistema satellitare è montato sul veicolo e misura la posizione a una distanza $\alpha$ dal centro ($x_0, y_0$) lungo l’asse $y_b$:
 \[
 \begin{aligned}
 x_m &= x_0 - \alpha \cos(\theta) \\
 y_m &= y_0 + \alpha \sin(\theta)
 \end{aligned}
 \]
-Il sistema di misura fornisce anche \(\theta\) con una frequenza di 10 Hz.
+Il sistema di misura fornisce anche $\theta$ con una frequenza di 10 Hz.
 
 ### Obiettivo
-Portare il robot alle coordinate desiderate \((x_d, y_d)\) con orientamento \(\theta_d = \text{atan2}(y_d - y, x_d - x)\), partendo da condizioni iniziali \((x_0, y_0, \theta_0)\).
+Portare il robot alle coordinate desiderate $(x_d, y_d)$ con orientamento $\theta_d = \text{atan2}(y_d - y, x_d - x)$, partendo da condizioni iniziali $(x_0, y_0, \theta_0)$.
 
 ## Implementazione
 ### 1. Modello in Spazio di Stato
-- Le equazioni di uscita sono state definite assumendo \(\delta = 0.1\) m e \(\alpha = 0.2\) m.
-- Il modello è stato linearizzato e discretizzato con un passo di campionamento \(T = 0.1\) s.
+- Le equazioni di uscita sono state definite assumendo $\delta = 0.1$ m e $\alpha = 0.2$ m.
+- Il modello è stato linearizzato e discretizzato con un passo di campionamento $T = 0.1$ s.
 
 ### 2. Controllore
 Un **controllore a modello predittivo (MPC)** è stato progettato, considerando i seguenti vincoli:
-- \( |v| < 0.5 \, \text{m/s} \)
-- \( |\omega| < 0.3 \, \text{rad/s} \)
+- $|v| < 0.5 \, \text{m/s}$
+- $|\omega| < 0.3 \, \text{rad/s}$
 
 Tre approcci sono stati implementati:
 1. **LQR** (Linear Quadratic Regulator) per un controllo senza vincoli.
@@ -64,11 +65,6 @@ Tre approcci sono stati implementati:
 ### 3. Osservatore Stocastico
 Un filtro di Kalman è stato implementato per stimare lo stato del sistema basandosi sulle misure rumorose del sensore.
 
-## Simulazioni
-Le simulazioni includono:
-1. Confronto tra LQR e MPC (con e senza vincoli).
-2. Tracciamento delle traiettorie \(x, y\) e orientamento \(\theta\).
-3. Visualizzazione dell’errore tra stato reale e stimato.
 
 ### Risultati
 I risultati mostrano:
