@@ -90,8 +90,8 @@ I risultati mostrano:
 ## Parametri Principali
 | Parametro        | Valore  |
 |-------------------|---------|
-| \(\delta\)       | 0.1 m   |
-| \(\alpha\)       | 0.2 m   |
+|  $\delta$       | 0.1 m   |
+|  $\apha$       | 0.2 m   |
 | Passo \(T\)      | 0.1 s   |
 | Vincoli \(v\)    | \([-0.5, 0.5]\) m/s |
 | Vincoli \(\omega\) | \([-0.3, 0.3]\) rad/s |
