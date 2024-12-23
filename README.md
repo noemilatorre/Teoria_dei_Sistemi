@@ -12,27 +12,42 @@ Il modello del robot considera:
   - Lineare: $v$
   - Angolare: $\omega$
 
+### Posizione del Punto Controllato
 La posizione del punto controllato è descritta da:
-\[
+$$
 \begin{aligned}
 x &= x_0 + \delta \cos(\theta) \\
 y &= y_0 + \delta \sin(\theta)
 \end{aligned}
-\]
+$$
 
+### Dinamica del Sistema
 La dinamica del sistema è:
-\[
+$$
 \begin{aligned}
 \dot{x} &= v \cos(\theta) - \delta \omega \sin(\theta) \\
 \dot{y} &= v \sin(\theta) + \delta \omega \cos(\theta) \\
 \dot{\theta} &= \omega
 \end{aligned}
-\]
+$$
 
+### Variabili di Stato
 Le variabili di stato sono definite come:
-\[
-x = \begin{bmatrix} x \\ y \\ \theta \end{bmatrix}, \quad u = \begin{bmatrix} v \\ \omega \end{bmatrix}.
-\]
+$$
+x = \begin{bmatrix} x \\ y \\ \theta \end{bmatrix}, \quad 
+u = \begin{bmatrix} v \\ \omega \end{bmatrix}.
+$$
+
+### Sistema di Misura
+Un sistema satellitare è montato sul veicolo e misura la posizione a una distanza $\alpha$ dal centro ($x_0, y_0$) lungo l’asse $y_b$:
+$$
+\begin{aligned}
+x_m &= x_0 - \alpha \cos(\theta) \\
+y_m &= y_0 + \alpha \sin(\theta)
+\end{aligned}
+$$
+
+Il sistema di misura fornisce anche $\theta$ con una frequenza di 10 Hz.
 
 ### Sistema di Misura
 Un sistema satellitare è montato sul veicolo e misura la posizione a una distanza $\alpha$ dal centro ($x_0, y_0$) lungo l’asse $y_b$:
