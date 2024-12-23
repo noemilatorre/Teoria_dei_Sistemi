@@ -52,14 +52,14 @@ Il sistema di misura fornisce anche $\theta$ con una frequenza di 10 Hz.
 ### Sistema di Misura
 Un sistema satellitare è montato sul veicolo e misura la posizione a una distanza $\alpha$ dal centro ($x_0, y_0$) lungo l’asse $y_b$:
 ```math
-\[
+```math
 \begin{aligned}
 x_m &= x_0 - \alpha \cos(\theta) \\
 y_m &= y_0 + \alpha \sin(\theta)
 \end{aligned}
-\]
-Il sistema di misura fornisce anche $\theta$ con una frequenza di 10 Hz.
 ```
+Il sistema di misura fornisce anche $\theta$ con una frequenza di 10 Hz.
+
 ### Obiettivo
 Portare il robot alle coordinate desiderate $(x_d, y_d)$ con orientamento $\theta_d = \text{atan2}(y_d - y, x_d - x)$, partendo da condizioni iniziali $(x_0, y_0, \theta_0)$.
 
