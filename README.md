@@ -13,43 +13,45 @@ Il modello del robot considera:
   - Angolare: $\omega$
 
 ### Posizione del Punto Controllato
+```math
 La posizione del punto controllato è descritta da:
-$$
+
 \begin{aligned}
 x &= x_0 + \delta \cos(\theta) \\
 y &= y_0 + \delta \sin(\theta)
 \end{aligned}
-$$
 
+```
 ### Dinamica del Sistema
 La dinamica del sistema è:
-$$
+``` math
 \begin{aligned}
 \dot{x} &= v \cos(\theta) - \delta \omega \sin(\theta) \\
 \dot{y} &= v \sin(\theta) + \delta \omega \cos(\theta) \\
 \dot{\theta} &= \omega
 \end{aligned}
-$$
+```
 
 ### Variabili di Stato
 Le variabili di stato sono definite come:
-$$
+```math
 x = \begin{bmatrix} x \\ y \\ \theta \end{bmatrix}, \quad 
 u = \begin{bmatrix} v \\ \omega \end{bmatrix}.
-$$
+```
 
 ### Sistema di Misura
 Un sistema satellitare è montato sul veicolo e misura la posizione a una distanza $\alpha$ dal centro ($x_0, y_0$) lungo l’asse $y_b$:
-$$
+```math
 \begin{aligned}
 x_m &= x_0 - \alpha \cos(\theta) \\
 y_m &= y_0 + \alpha \sin(\theta)
 \end{aligned}
-$$
+```
 
 Il sistema di misura fornisce anche $\theta$ con una frequenza di 10 Hz.
 
 ### Sistema di Misura
+```math
 Un sistema satellitare è montato sul veicolo e misura la posizione a una distanza $\alpha$ dal centro ($x_0, y_0$) lungo l’asse $y_b$:
 \[
 \begin{aligned}
@@ -58,7 +60,7 @@ y_m &= y_0 + \alpha \sin(\theta)
 \end{aligned}
 \]
 Il sistema di misura fornisce anche $\theta$ con una frequenza di 10 Hz.
-
+```
 ### Obiettivo
 Portare il robot alle coordinate desiderate $(x_d, y_d)$ con orientamento $\theta_d = \text{atan2}(y_d - y, x_d - x)$, partendo da condizioni iniziali $(x_0, y_0, \theta_0)$.
 
