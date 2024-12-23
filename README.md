@@ -94,7 +94,7 @@ I risultati mostrano:
 |  $\alpha$       | 0.2 m   |
 | Passo \(T\)      | 0.1 s   |
 | Vincoli \(v\)    | \([-0.5, 0.5]\) m/s |
-| Vincoli \(\omega\) | \([-0.3, 0.3]\) rad/s |
+| Vincoli $\omega$ | \([-0.3, 0.3]\) rad/s |
 
 ## Requisiti
 - MATLAB con toolbox di ottimizzazione.
