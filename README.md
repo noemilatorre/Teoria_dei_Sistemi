@@ -13,9 +13,8 @@ Il modello del robot considera:
   - Angolare: $\omega$
 
 ### Posizione del Punto Controllato
-```math
 La posizione del punto controllato è descritta da:
-
+```math
 \begin{aligned}
 x &= x_0 + \delta \cos(\theta) \\
 y &= y_0 + \delta \sin(\theta)
@@ -51,8 +50,8 @@ y_m &= y_0 + \alpha \sin(\theta)
 Il sistema di misura fornisce anche $\theta$ con una frequenza di 10 Hz.
 
 ### Sistema di Misura
-```math
 Un sistema satellitare è montato sul veicolo e misura la posizione a una distanza $\alpha$ dal centro ($x_0, y_0$) lungo l’asse $y_b$:
+```math
 \[
 \begin{aligned}
 x_m &= x_0 - \alpha \cos(\theta) \\
