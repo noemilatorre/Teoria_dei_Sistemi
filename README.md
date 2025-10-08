@@ -1,10 +1,22 @@
 # ROBILAUT - Controllo del Moto di un Robot Mobile
 
-## Descrizione del Progetto
-Il progetto **ROBILAUT** riguarda la progettazione del controllo del moto di un robot mobile di tipo uniciclo. Lo scopo è controllare un punto situato sull’asse di simmetria del robot, a una distanza specificata dal punto centrale tra le due ruote.
+[![MATLAB](https://img.shields.io/badge/MATLAB-R2023b-orange?logo=mathworks)](https://www.mathworks.com/)
+[![Control Systems](https://img.shields.io/badge/Control-MPC%20%26%20LQR-blue)](https://www.mathworks.com/products/control.html)
+[![Status](https://img.shields.io/badge/Status-Completed-success)]()
 
+Progetto di **Teoria dei Sistemi** per la progettazione del controllo del moto di un robot mobile di tipo uniciclo. Il sistema implementa strategie di controllo avanzate per il tracking di traiettorie con vincoli operativi.
 
-### Modello del Sistema
+---
+
+## Panoramica
+
+Il progetto **ROBILAUT** riguarda la progettazione del controllo del moto di un robot mobile di tipo uniciclo. L'obiettivo è controllare un punto situato sull'asse di simmetria del robot, a una distanza specificata dal punto centrale tra le due ruote, portandolo alle coordinate desiderate \((x_d, y_d)\) con orientamento ottimale.
+
+**Obiettivo principale:** Portare il robot alle coordinate desiderate \((x_d, y_d)\) con orientamento \(\theta_d = \text{atan2}(y_d - y, x_d - x)\), partendo da condizioni iniziali \((x_0, y_0, \theta_0)\).
+
+---
+
+## Modello del Sistema
 Il modello del robot considera:
 - **Coordinate del punto da controllare**: \(x, y\)
 - **Orientamento**: $\theta$
@@ -12,6 +24,20 @@ Il modello del robot considera:
   - Lineare: $v$
   - Angolare: $\omega$
 
+### Variabili di Stato e Controllo
+
+```math
+\mathbf{x} = \begin{bmatrix} x \\ y \\ \theta \end{bmatrix}, \quad 
+\mathbf{u} = \begin{bmatrix} v \\ \omega \end{bmatrix}
+```
+### Dinamica del Sistema
+```math
+\begin{aligned}
+\dot{x} &= v \cos(\theta) - \delta \omega \sin(\theta) \\
+\dot{y} &= v \sin(\theta) + \delta \omega \cos(\theta) \\
+\dot{\theta} &= \omega
+\end{aligned}
+```
 ### Posizione del Punto Controllato
 La posizione del punto controllato è descritta da:
 ```math
@@ -19,25 +45,7 @@ La posizione del punto controllato è descritta da:
 x &= x_0 + \delta \cos(\theta) \\
 y &= y_0 + \delta \sin(\theta)
 \end{aligned}
-
 ```
-### Dinamica del Sistema
-La dinamica del sistema è:
-``` math
-\begin{aligned}
-\dot{x} &= v \cos(\theta) - \delta \omega \sin(\theta) \\
-\dot{y} &= v \sin(\theta) + \delta \omega \cos(\theta) \\
-\dot{\theta} &= \omega
-\end{aligned}
-```
-
-### Variabili di Stato
-Le variabili di stato sono definite come:
-```math
-x = \begin{bmatrix} x \\ y \\ \theta \end{bmatrix}, \quad 
-u = \begin{bmatrix} v \\ \omega \end{bmatrix}.
-```
-
 ### Sistema di Misura
 Un sistema satellitare è montato sul veicolo e misura la posizione a una distanza $\alpha$ dal centro ($x_0, y_0$) lungo l’asse $y_b$:
 ```math
@@ -46,58 +54,79 @@ x_m &= x_0 - \alpha \cos(\theta) \\
 y_m &= y_0 + \alpha \sin(\theta)
 \end{aligned}
 ```
-
 Il sistema di misura fornisce anche $\theta$ con una frequenza di 10 Hz.
 
-### Sistema di Misura
-Un sistema satellitare è montato sul veicolo e misura la posizione a una distanza $\alpha$ dal centro ($x_0, y_0$) lungo l’asse $y_b$:
-```math
 
-\begin{aligned}
-x_m &= x_0 - \alpha \cos(\theta) \\
-y_m &= y_0 + \alpha \sin(\theta)
-\end{aligned}
-```
-Il sistema di misura fornisce anche $\theta$ con una frequenza di 10 Hz.
 
-### Obiettivo
-Portare il robot alle coordinate desiderate $(x_d, y_d)$ con orientamento $\theta_d = \text{atan2}(y_d - y, x_d - x)$, partendo da condizioni iniziali $(x_0, y_0, \theta_0)$.
 
 ## Implementazione
+
 ### 1. Modello in Spazio di Stato
-- Le equazioni di uscita sono state definite assumendo $\delta = 0.1$ m e $\alpha = 0.2$ m.
-- Il modello è stato linearizzato e discretizzato con un passo di campionamento $T = 0.1$ s.
+- **Linearizzazione** del modello non lineare around del punto di equilibrio
+- **Discretizzazione** con passo di campionamento T = 0.1 s
+- **Parametri**: δ = 0.1 m, α = 0.2 m
 
-### 2. Controllore
-Un **controllore a modello predittivo (MPC)** è stato progettato, considerando i seguenti vincoli:
-- $|v| < 0.5 \, \text{m/s}$
-- $|\omega| < 0.3 \, \text{rad/s}$
+### 2. Strategie di Controllo Implementate
 
-Tre approcci sono stati implementati:
-1. **LQR** (Linear Quadratic Regulator) per un controllo senza vincoli.
-2. **MPC senza vincoli**.
-3. **MPC con vincoli**.
+| Controllore | Descrizione | Vincoli |
+|-------------|-------------|---------|
+| **LQR** | Linear Quadratic Regulator | Nessun vincolo |
+| **MPC Senza Vincoli** | Model Predictive Control | Nessun vincolo |
+| **MPC Con Vincoli** | Model Predictive Control | \|v\| < 0.5 m/s, \|ω\| < 0.3 rad/s |
 
 ### 3. Osservatore Stocastico
-Un filtro di Kalman è stato implementato per stimare lo stato del sistema basandosi sulle misure rumorose del sensore.
+- **Filtro di Kalman** per la stima dello stato sulla base delle misure del sensore
+- Gestione del rumore di misura del sensore satellitare
+- Frequenza di aggiornamento: 10 Hz
 
+## Risultati
 
-### Risultati
-I risultati mostrano:
-- Miglior precisione del MPC rispetto al LQR in presenza di vincoli.
-- Capacità dell'osservatore stocastico di gestire il rumore nelle misure.
+### Prestazioni dei Controllori
+- **MPC con vincoli**: Migliore prestazione in scenari realisti con limiti fisici
+- **LQR**: Prestazioni ottimali in assenza di vincoli
+- **Filtro di Kalman**: efficace soppressione del rumore di misura
 
-## Parametri Principali
-| Parametro        | Valore  |
-|-------------------|---------|
-|  $\delta$       | 0.1 m   |
-|  $\alpha$       | 0.2 m   |
-| Passo \(T\)      | 0.1 s   |
-| Vincoli \(v\)    | \([-0.5, 0.5]\) m/s |
-| Vincoli $\omega$ | \([-0.3, 0.3]\) rad/s |
+### Metriche di Valutazione
+- Tempo di assestamento
+- Overshoot
+- Rispetto dei vincoli operativi
+- Robustezza al rumore di misura
 
-## Requisiti
-- MATLAB con toolbox di ottimizzazione.
-- Familiarità con sistemi di controllo e teoria dei sistemi.
+## Parametri del Sistema
+
+| Parametro | Simbolo | Valore | Unità |
+|-----------|---------|--------|-------|
+| Distanza punto controllo | δ | 0.1 | m |
+| Distanza sensore | α | 0.2 | m |
+| Passo di campionamento | T | 0.1 | s |
+| Velocità lineare max | v_max | 0.5 | m/s |
+| Velocità angolare max | ω_max | 0.3 | rad/s |
+
+## Installazione ed Esecuzione
+
+### Prerequisiti
+- **MATLAB R2023b** o superiore
+- **Optimization Toolbox**
+- **Control System Toolbox**
+
+### Esecuzione
+
+```bash
+git clone https://github.com/noemilatorre/Teoria_dei_Sistemi.git
+#Esecuzione dello script matlab con FALG per i diversi casi
+```
+
+## Autore
+**Noemi La Torre**
+
+- Email: latorre.noemi17@gmail.com
+- LinkedIn: [linkedin.com/in/noemilatorre](https://linkedin.com/in/noemilatorre)
+- GitHub: [github.com/noemilatorre](https://github.com/noemilatorre)
+- Portfolio: [noemilatorre.github.io](https://noemilatorre.github.io)
+
+---
+
+*Progetto sviluppato per il corso di Teoria dei Sistemi presso l'Università degli Studi di Cassino e del Lazio Meridionale.*
+
 
 
