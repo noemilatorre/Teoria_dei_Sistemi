@@ -4,7 +4,7 @@
 [![Control Systems](https://img.shields.io/badge/Control-MPC%20%26%20LQR-blue)](https://www.mathworks.com/products/control.html)
 [![Status](https://img.shields.io/badge/Status-Completed-success)]()
 
-Progetto di **Teoria dei Sistemi** per la progettazione del controllo del moto di un robot mobile di tipo uniciclo. Il sistema implementa strategie di controllo avanzate per il tracking di traiettorie con vincoli operativi.
+Progetto di **Teoria dei Sistemi** per la progettazione del controllo del moto di un robot mobile di tipo uniciclo con l'obiettivo di implementare un osservatore di stato e un controllore predittivo (MPC) per muovere il sistema da uno stato iniziale a uno stato desiderato.
 
 ---
 
@@ -12,7 +12,17 @@ Progetto di **Teoria dei Sistemi** per la progettazione del controllo del moto d
 
 Il progetto **ROBILAUT** riguarda la progettazione del controllo del moto di un robot mobile di tipo uniciclo. L'obiettivo è controllare un punto situato sull'asse di simmetria del robot, a una distanza specificata dal punto centrale tra le due ruote, portandolo alle coordinate desiderate \((x_d, y_d)\) con orientamento ottimale.
 
-**Obiettivo principale:** Portare il robot alle coordinate desiderate \((x_d, y_d)\) con orientamento \(\theta_d = \text{atan2}(y_d - y, x_d - x)\), partendo da condizioni iniziali \((x_0, y_0, \theta_0)\).
+
+## Obiettivo Progetto
+Il robot deve muoversi da uno stato iniziale `x = [0, 0, 0]ᵀ` a uno stato desiderato definito come:
+
+```math
+x_d = 10, \quad y_d = 2, \quad \theta_d = \text{atan2}(y_d - y, x_d - x)
+```
+
+Il progetto comprende:
+- Progettazione di un **Filtro di Kalman Esteso (EKF)** per l'osservazione dello stato
+- Implementazione di un **Controllore Predittivo (MPC)** per ottenere il comportamento desiderato
 
 ---
 
@@ -56,8 +66,15 @@ y_m &= y_0 + \alpha \sin(\theta)
 ```
 Il sistema di misura fornisce anche $\theta$ con una frequenza di 10 Hz.
 
+## Parametri del Sistema
 
-
+| Parametro | Simbolo | Valore | Unità |
+|-----------|---------|--------|-------|
+| Distanza punto controllo | δ | 0.1 | m |
+| Distanza sensore | α | 0.2 | m |
+| Passo di campionamento | T | 0.1 | s |
+| Velocità lineare max | v_max | 0.5 | m/s |
+| Velocità angolare max | ω_max | 0.3 | rad/s |
 
 ## Implementazione
 
@@ -78,29 +95,23 @@ Il sistema di misura fornisce anche $\theta$ con una frequenza di 10 Hz.
 - **Filtro di Kalman** per la stima dello stato sulla base delle misure del sensore
 - Gestione del rumore di misura del sensore satellitare
 - Frequenza di aggiornamento: 10 Hz
+ 
 
 ## Risultati
 
 ### Prestazioni dei Controllori
-- **MPC con vincoli**: Migliore prestazione in scenari realisti con limiti fisici
-- **LQR**: Prestazioni ottimali in assenza di vincoli
 - **Filtro di Kalman**: efficace soppressione del rumore di misura
+ <img width="1758" height="876" alt="image" src="https://github.com/user-attachments/assets/caf919c6-6143-465a-9919-2f27069d31d8" />
 
-### Metriche di Valutazione
-- Tempo di assestamento
-- Overshoot
-- Rispetto dei vincoli operativi
-- Robustezza al rumore di misura
+- **MPC senza vincoli**
+<img width="1758" height="890" alt="image" src="https://github.com/user-attachments/assets/f44dd2ce-d8a2-41d8-9454-f524a515b21e" />
 
-## Parametri del Sistema
+- **MPC con vincoli**: Migliore prestazione in scenari realisti con limiti fisici
+<img width="1250" height="826" alt="image" src="https://github.com/user-attachments/assets/a587f053-ff8f-48d5-a082-fade5af08ec0" />
 
-| Parametro | Simbolo | Valore | Unità |
-|-----------|---------|--------|-------|
-| Distanza punto controllo | δ | 0.1 | m |
-| Distanza sensore | α | 0.2 | m |
-| Passo di campionamento | T | 0.1 | s |
-| Velocità lineare max | v_max | 0.5 | m/s |
-| Velocità angolare max | ω_max | 0.3 | rad/s |
+- **LQR**: Prestazioni ottimali in assenza di vincoli
+<img width="1788" height="893" alt="image" src="https://github.com/user-attachments/assets/6ffae760-8866-4a83-8f54-330d50748a7d" />
+
 
 ## Installazione ed Esecuzione
 
